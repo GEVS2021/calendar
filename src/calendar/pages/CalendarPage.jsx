@@ -4,21 +4,12 @@ import { addHours } from 'date-fns'
 import { Navbar, CalendarEvent, CalendarModal } from "../";
 import { localizer, getMessagesES } from '../../helpers';
 import { useState } from 'react';
-
-const events = [{
-  title: "Cumpleaños del jefe",
-  notes: "Comprar pastel",
-  start: new Date(),
-  end: addHours( new Date(), 2),
-  bgColor: '#fafafa',
-  user: {
-    _id: "123",
-    name: "Gerson"
-  }
-}];
+import { useUiStore, useCalendarStore } from '../../hooks';
 
 export const CalendarPage = () => {
 
+  const {openDateModal} = useUiStore();
+  const {events, setActiveEvent} = useCalendarStore();
   const [lastView, setLastView] = useState(localStorage.getItem("lastView") || "week");
 
   const eventStyleGetter = (event, start, end, isSelected) => {
@@ -35,11 +26,11 @@ export const CalendarPage = () => {
   }
 
   const onDoubleClick = (event) => {
-
+    openDateModal();
   }
 
   const onSelect = (event) => {
-
+    setActiveEvent(event);
   }
 
   const onViewChanged = (event) => {
