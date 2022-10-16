@@ -1,6 +1,5 @@
 export const CalendarEvent = ({event}) => {
-  const { title, user } = event
-  console.log('user', user)
+  const { title, user } = event  
   return (
     <>
       <strong>{title}</strong>
