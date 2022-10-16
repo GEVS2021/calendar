@@ -3,25 +3,13 @@ import { Navbar, CalendarEvent, CalendarModal } from '../'
 import { Calendar} from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 
-import { addHours } from 'date-fns'
 import { getMessgesES, localizer } from '../../helpers'
-import { useUiStore } from '../../hooks'
-
-
-const events = [{
-  title: 'Cumpleaños',
-  user: {
-    _id: '123',
-    name: 'Jheysson'
-  },
-  notes:'Example note',
-  start: new Date(),
-  end: addHours(new Date(), 2),
-}]
+import { useCalendarStore, useUiStore } from '../../hooks'
 
 export const CalendarPage = () => {
 
   const { openDateModal } = useUiStore()
+  const { events } = useCalendarStore()
 
   const [lastView, setLastView] = useState(localStorage.getItem('lastView') || 'week')
 
