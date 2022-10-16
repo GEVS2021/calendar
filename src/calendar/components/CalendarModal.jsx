@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { addHours, differenceInSeconds } from 'date-fns';
 import Modal from 'react-modal';
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import es from 'date-fns/locale/es'
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css'
 
 registerLocale('es', es)
 
@@ -23,6 +25,7 @@ Modal.setAppElement('#root');
 export const CalendarModal = () => {
 
   const [isOpen, setIsOpen] = useState(true)
+  const [formSubmitted, setFormSubmitted] = useState(false)
 
   const [formValues, setFormValues] = useState({
     title: 'Jheysson',
@@ -31,10 +34,12 @@ export const CalendarModal = () => {
     end: addHours(new Date(), 2)
   })
 
-  const onCloseModal = () => {
-    console.log('cerrando modal')
-    setIsOpen(!isOpen)
-  }
+  const titleClass = useMemo(() => {
+    if(!formSubmitted) return ''
+    return (formValues.title.trim().length > 0 )
+      ? 'is-valid' 
+      : 'is-invalid'
+  }, [formValues.title, formSubmitted])
 
   const onInputChanged = ({target}) => {
     setFormValues({
@@ -50,11 +55,17 @@ export const CalendarModal = () => {
     })
   }
 
+  const onCloseModal = () => {
+    console.log('cerrando modal')
+    setIsOpen(!isOpen)
+  }
+
   const onsubmit = (event) => {
+    setFormSubmitted(true)
     event.preventDefault();
     const difference = differenceInSeconds(formValues.end, formValues.start)
     if(isNaN(difference) || difference <= 0){
-      console.error('ERROR: 123')
+      Swal.fire('Fechas incorrectas', 'Revisar las fechas ingresadas', 'error')
       return
     }
 
@@ -62,6 +73,10 @@ export const CalendarModal = () => {
 
     console.log('formValues ==> ', formValues)
   }
+
+  useMemo(() => {
+
+  }, [formValues.title, formSubmitted])
 
   return (
     <Modal
@@ -108,7 +123,7 @@ export const CalendarModal = () => {
                 <label>Titulo y notas</label>
                 <input 
                     type="text" 
-                    className="form-control"
+                    className={`form-control ${titleClass}`}
                     placeholder="Título del evento"
                     name="title"
                     autoComplete="off"
