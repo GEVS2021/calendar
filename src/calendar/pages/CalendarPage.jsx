@@ -24,8 +24,6 @@ export const CalendarPage = () => {
   const [lastView, setLastView] = useState(localStorage.getItem("lastView") || "month");
 
   const eventStyleGetter = (event, start, end, isSelected) => {
-    console.log(event, start, end, isSelected);
-
     const style = {
       backgroundColor: "#347CF7",
       borderRadius: '0px',
