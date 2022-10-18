@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Modal from 'react-modal';
+
+import Swal from 'sweetalert2';
+// import 'sweetalert2/dist/sweetalert2.min.css';
 
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
 import es from 'date-fns/locale/es';
 import { addHours, differenceInSeconds } from 'date-fns';
 
@@ -23,13 +27,24 @@ Modal.setAppElement('#root');
 
 export const CalendarModal = () => {
 
+    //States
     const [isOpen, setIsOpen] = useState(true);
+    const [formSubmitted, setFormSubmitted] = useState(false);
     const [formValues, setFormValues] = useState({
         title: 'Edu Estula',
         notes: 'Estudiando ando',
         start: new Date(),
         end: addHours(new Date(), 2)
     });
+
+    //Memos
+    const titleClass = useMemo(() => {
+        if(!formSubmitted)
+            return "";
+
+        return !formValues.title ? "is-valid" : "";
+
+    }, [formValues.title, formSubmitted]);
 
     const onCloseModal = () => {
         setIsOpen(false);
@@ -51,10 +66,13 @@ export const CalendarModal = () => {
 
     const onSubmit = (event) => {
         event.preventDefault();
+        setFormSubmitted(true);
 
         const dateDifference = differenceInSeconds(formValues.end, formValues.start);
-        if(isNaN(dateDifference) || dateDifference <= 0)
+        if(isNaN(dateDifference) || dateDifference <= 0){
+            Swal.fire("Fechas incorrectas", "Revisar las fechas ingresadas", "error");
             return console.log("Error en fechas");
+        }
 
         if(!formValues.title)
             return;
@@ -121,7 +139,7 @@ export const CalendarModal = () => {
                 <div className="form-group mb-2">
                     <textarea
                         type="text"
-                        className="form-control"
+                        className={`form-control ${titleClass}`}
                         placeholder="Notas"
                         rows="5"
                         name="notes"
