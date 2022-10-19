@@ -6,23 +6,15 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Navbar, CalendarEvent, CalendarModal } from '../'
 import { localizer } from '../helpers/calendarLocalizer';
 import { getCalendarMessagesES } from '../helpers';
-import { useUiStore } from '../../hooks';
+import { useCalendarStore, useUiStore } from '../../hooks';
 
-const events = [{
-  title: "Cumpleaños del Jefe",
-  notes: "Hay que comprar el regalo",
-  start: new Date(),
-  end: addHours(new Date(), 2),
-  bgColor: "fafafa",
-  user: {
-    _id: "123",
-    name: "Fernando"
-  }
-}];
 
 export const CalendarPage = () => {
   
+  //redux
   const { openDateModal } = useUiStore();
+  const { events } = useCalendarStore();
+
   const [lastView, setLastView] = useState(localStorage.getItem("lastView") || "month");
 
   const eventStyleGetter = (event, start, end, isSelected) => {
