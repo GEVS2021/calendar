@@ -24,12 +24,12 @@ const customStyles = {
 Modal.setAppElement('#root');
 export const CalendarModal = () => {
     const {isDateModalOpen, closeDateModal} = useUiStore();
-    const {activeEvent} = useCalendarStore();
+    const {activeEvent, startSavingEvent} = useCalendarStore();
     const [isOpen, setIsOpen] = useState(true);
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [formValues, setformValues] = useState({
-        title: 'Kevin',
-        notes: 'Valencia',
+        title: '',
+        notes: '',
         start: new Date(),
         end: addHours(new Date(), 2),
 
@@ -59,7 +59,7 @@ export const CalendarModal = () => {
         //console.log('Cerrando Modal.')
         //setIsOpen(false);
     }
-    const onSubmit = (event) => {
+    const onSubmit = async (event) => {
         setFormSubmitted(true);
         event.preventDefault();
         const difference = differenceInSeconds(formValues.end, formValues.start)
@@ -73,6 +73,9 @@ export const CalendarModal = () => {
         console.log(formValues);
 
         //TODO:
+        await startSavingEvent(formValues);
+        closeDateModal();
+        setFormSubmitted(false);
     }
 
     useEffect(() => {
