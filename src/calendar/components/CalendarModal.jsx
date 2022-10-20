@@ -30,7 +30,7 @@ export const CalendarModal = () => {
 
     //props
     const { isDateModalOpen, closeDateModal } = useUiStore();
-    const { activeEvent } = useCalendarStore();
+    const { activeEvent, saveEvent } = useCalendarStore();
 
     //States
     const [formSubmitted, setFormSubmitted] = useState(false);
@@ -46,7 +46,7 @@ export const CalendarModal = () => {
         if(!formSubmitted)
             return "";
 
-        return !formValues.title ? "is-valid" : "";
+        return !formValues.title ? "is-invalid" : "";
 
     }, [formValues.title, formSubmitted]);
 
@@ -87,7 +87,9 @@ export const CalendarModal = () => {
         if(!formValues.title)
             return;
 
-        console.log("formValues", formValues);
+        saveEvent(formValues);
+        closeDateModal();
+        setFormSubmitted(false);
 
     }
 
@@ -136,7 +138,7 @@ export const CalendarModal = () => {
                     <label>Titulo y notas</label>
                     <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${titleClass}`}
                         placeholder="Título del evento"
                         name="title"
                         autoComplete="off"
@@ -149,7 +151,7 @@ export const CalendarModal = () => {
                 <div className="form-group mb-2">
                     <textarea
                         type="text"
-                        className={`form-control ${titleClass}`}
+                        className="form-control"
                         placeholder="Notas"
                         rows="5"
                         name="notes"
