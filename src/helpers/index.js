@@ -1,3 +1,3 @@
 export * from './calendarLocalizer'
 
-export * from './geMessages'
+export * from './getMessages'
