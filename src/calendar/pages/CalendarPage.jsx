@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Navbar, CalendarEvent, CalendarModal } from '../'
+import { Navbar, CalendarEvent, CalendarModal, FabAddNew } from '../'
 import { Calendar} from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 
@@ -62,6 +62,7 @@ export const CalendarPage = () => {
         onView={onViewChanged}
       />
       <CalendarModal />
+      <FabAddNew />
     </>
   )
 }
