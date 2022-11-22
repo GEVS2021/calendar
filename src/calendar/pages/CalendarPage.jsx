@@ -6,15 +6,21 @@ import { Navbar, CalendarEvent, CalendarModal, FabAddNew, FabDelete } from '../'
 import { localizer } from '../helpers/calendarLocalizer';
 import { getCalendarMessagesES } from '../helpers';
 import { useCalendarStore, useUiStore } from '../../hooks';
+import { useEffect } from 'react';
 
 
 export const CalendarPage = () => {
   
   //redux
   const { openDateModal } = useUiStore();
-  const { events, setActiveEvent } = useCalendarStore();
+  const { events, setActiveEvent, startLoadingEvent } = useCalendarStore();
 
   const [lastView, setLastView] = useState(localStorage.getItem("lastView") || "month");
+
+  useEffect(() => {
+    startLoadingEvent();    
+  }, [])
+  
 
   const eventStyleGetter = (event, start, end, isSelected) => {
     const style = {
