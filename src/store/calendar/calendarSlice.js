@@ -1,23 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addHours } from "date-fns";
-
-const tempEvent = {
-    _id: new Date().getTime(),
-    title: "Cumpleaños del Jefe",
-    notes: "Hay que comprar el regalo",
-    start: new Date(),
-    end: addHours(new Date(), 2),
-    bgColor: "fafafa",
-    user: {
-        _id: "123",
-        name: "Fernando"
-    }
-};
 
 export const calendarSlice = createSlice({
     name: "ui",
     initialState: {
-        events: [tempEvent],
+        isLoading: true,
+        events: [],
         activeEvent: null
     },
     reducers: {
@@ -42,8 +29,22 @@ export const calendarSlice = createSlice({
                 state.events = state.events.filter(calendarEvent => calendarEvent._id != state.activeEvent._id);
                 state.activeEvent = null;
             }
+        },
+        onLoadEvents: (state, { payload=[] }) => {
+            state.isLoading = false;
+            payload.map(newEvent => {
+                const exists = state.events.some(currentEvent => currentEvent.id === newEvent.id);
+                if(!exists)
+                    state.events.push(newEvent);
+            })
         }
     }
 });
 
-export const { onSetActiveEvent, onAddNewEvent, onUpdateEvent, onDeleteEvent } = calendarSlice.actions;
+export const { 
+    onSetActiveEvent, 
+    onAddNewEvent, 
+    onUpdateEvent, 
+    onDeleteEvent,
+    onLoadEvents
+} = calendarSlice.actions;
