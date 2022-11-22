@@ -24,10 +24,6 @@ export const CalendarPage = () => {
   
 
   const eventStyleGetter = (event, start, end, isSelected) => {
-    console.log(user.uid);
-    console.log(event.title)
-    console.log(event.user._id);
-    console.log(event.user.uid);
     const isMyEvent = (user.uid === event.user._id) || (user.uid === event.user.uid)
 
     const style = {
