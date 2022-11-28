@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { Calendar } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -5,17 +6,21 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Navbar, CalendarEvent, CalendarModal, FabAddNew, FabDelete } from '../'
 
 import { localizer, getMessagesES } from '../../helpers';
-import { useUiStore, useCalendarStore } from '../../hooks';
+import { useUiStore, useCalendarStore, useAuthStore } from '../../hooks';
 
 export const CalendarPage = () => {
 
+  const { user } = useAuthStore();
   const { openDateModal } = useUiStore();
-  const { events, setActiveEvent } = useCalendarStore();
+  const { events, setActiveEvent, startLoadingEvent } = useCalendarStore();
   const [lastView, setLastView] = useState(localStorage.getItem('lastView') || 'week')
 
   const eventStyleGetter = (event, start, end, isSelected) => {
+
+    const isMyEvent = ( user.uid === event.user._id ) || ( user.uid === event.user.uid )
+
     const style = {
-      backgroundColor: '#347CF7',
+      backgroundColor: isMyEvent ? '#347CF7' : '#465660',
       borderRadius: '10px',
       opacity: 0.8,
       color: 'white'
@@ -38,6 +43,11 @@ export const CalendarPage = () => {
     localStorage.setItem('lastView', event)
     setLastView(event)
   }
+
+  useEffect(() => {
+    startLoadingEvent()
+  }, [])
+  
 
   return (
     <>
